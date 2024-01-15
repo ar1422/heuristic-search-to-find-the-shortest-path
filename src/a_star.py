@@ -1,6 +1,7 @@
 import heapq
 import math
 
+
 class AStar(object):
     """
     Class for AStar algorithm and all relevant functions.

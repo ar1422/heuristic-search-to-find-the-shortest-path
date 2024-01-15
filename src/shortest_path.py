@@ -22,6 +22,8 @@ class ShortestPath(object):
 
         self.dimension = (395, 500)
         self.input_graph = Graph(self.dimension, sys.argv[1], sys.argv[2], sys.argv[4])
+        self.input_filename = sys.argv[1]
+        self.output_filename = sys.argv[4]
         self.points_list = self.process_path_file(sys.argv[3])
         self.destination_point = None
 
