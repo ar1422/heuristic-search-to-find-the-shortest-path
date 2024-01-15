@@ -1,24 +1,12 @@
 import heapq
 import math
+from a_star_constants import COLOR_TO_SPEED_MAP
 
 
 class AStar(object):
     """
     Class for AStar algorithm and all relevant functions.
     """
-    color_to_speed_map = {
-        (248, 148, 18): 6.0,  # Open land
-        (255, 192, 0): 1,  # Rough meadow
-        (255, 255, 255): 4.0,  # Easy movement forest
-        (2, 208, 60): 2.0,  # Slow run forest
-        (2, 136, 40): 1.5,  # Walk forest
-        (5, 73, 24): 0.2,  # Impassible vegetation
-        (0, 0, 255): 0.01,  # Lake/Swamp/Marsh
-        (71, 51, 3): 7.0,  # Paved road
-        (0, 0, 0): 5.5,  # Footpath
-        (205, 0, 101): 0.0001,  # Out of bounds
-    }
-
     def __init__(self, graph):
         self.values = []
         self.graph = graph
@@ -32,7 +20,7 @@ class AStar(object):
     @staticmethod
     def heuristic_function(neighbor_point, end_point):
         distance = AStar.calculate_distance(neighbor_point, end_point)
-        return distance / AStar.color_to_speed_map[neighbor_point.color]
+        return distance / COLOR_TO_SPEED_MAP[neighbor_point.color]
 
     @staticmethod
     def calculate_distance(point_1, point_2):
@@ -45,7 +33,7 @@ class AStar(object):
     @staticmethod
     def cost_function(current_point, neighbor_point):
         distance = AStar.calculate_distance(current_point, neighbor_point)
-        return distance / AStar.color_to_speed_map[neighbor_point.color]
+        return distance / COLOR_TO_SPEED_MAP[neighbor_point.color]
 
     def a_star_search(self, start, goal):
 
@@ -70,8 +58,8 @@ class AStar(object):
                     self.push_to_heap(next_neighbor, priority)
                     path_map[next_neighbor] = current
                     cost_map[next_neighbor] = neighbor_cost
-                    distance_map[next_neighbor] = distance_map[current] + self.calculate_distance(current_point_obj,
-                                                                                                  next_neighbor_obj)
+                    new_distance = distance_map[current] + self.calculate_distance(current_point_obj, next_neighbor_obj)
+                    distance_map[next_neighbor] = new_distance
 
         self.values.clear()
         return path_map, distance_map

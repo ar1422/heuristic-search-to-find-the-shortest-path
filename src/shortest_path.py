@@ -4,8 +4,8 @@ This is a python file for the problem - https://cs.rit.edu/~jro/courses/intelSys
 """
 
 import sys
-from graph import Graph
 from a_star import AStar
+from process_path_file import process_path_file
 
 PARAMETER_ERROR_MSG = "Please provide terrain-image, elevation-file, path-file, output-image-filename parameters"
 TOTAL_DISTANCE_MSG = "Total Distance from cost_map: {} m"
@@ -16,26 +16,16 @@ class ShortestPath(object):
     Class for the Lab actual code - Summer Orienteering.
     """
 
-    def __init__(self):
+    def __init__(self, input_graph):
         if len(sys.argv) != 5:
             raise ValueError(PARAMETER_ERROR_MSG)
 
         self.dimension = (395, 500)
-        self.input_graph = Graph(self.dimension, sys.argv[1], sys.argv[2], sys.argv[4])
+        self.input_graph = input_graph
         self.input_filename = sys.argv[1]
         self.output_filename = sys.argv[4]
-        self.points_list = self.process_path_file(sys.argv[3])
-        self.destination_point = None
-
-    def process_path_file(self, path_file):
-        points_list = []
-        with open(path_file) as f:
-            for line in f:
-                x_val, y_val = line.strip().split()
-                points_list.append((int(x_val), int(y_val)))
-
-        self.destination_point = points_list[-1]
-        return points_list
+        self.points_list = process_path_file(sys.argv[3])
+        self.destination_point = self.points_list[-1]
 
     @staticmethod
     def get_points_on_path(path_map, destination):
@@ -60,12 +50,3 @@ class ShortestPath(object):
 
         self.input_graph.change_color_of_points(output_points, self.points_list)
         print(TOTAL_DISTANCE_MSG.format(total_distance))
-
-
-def main():
-    so = ShortestPath()
-    so.run()
-
-
-if __name__ == '__main__':
-    main()
